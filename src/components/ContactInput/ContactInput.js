@@ -15,7 +15,7 @@ class ContactInput extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.onSubmit(this.state.name, this.state.number);
+    this.props.onSubmit(this.state);
 
     this.setState({ name: '' });
     this.setState({ number: '' });

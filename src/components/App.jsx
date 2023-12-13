@@ -15,12 +15,7 @@ class App extends Component {
     filter: '',
   };
 
-  addContact = (name, number) => {
-    const contact = {
-      id: shortid.generate(),
-      name,
-      number,
-    };
+  addContact = ({ name, number }) => {
     const normalizedName = name.toLowerCase();
 
     if (
@@ -30,14 +25,19 @@ class App extends Component {
     ) {
       return alert(`${name} is already in contacts!`);
     }
-    this.setState(pervState => ({
-      contacts: [contact, ...pervState.contacts],
+    const contact = {
+      id: shortid.generate(),
+      name,
+      number,
+    };
+    this.setState(prevState => ({
+      contacts: [contact, ...prevState.contacts],
     }));
   };
 
   deleteContact = contactId => {
-    this.setState(pervState => ({
-      contacts: pervState.contacts.filter(contact => contact.id !== contactId),
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
     }));
   };
 
@@ -45,15 +45,18 @@ class App extends Component {
     this.setState({ filter: e.currentTarget.value });
   };
 
-  render() {
+  getVisibleContacts = () => {
     const { contacts, filter } = this.state;
+    const normalizeFilter = filter.toLowerCase();
 
-    const normalizeFilter = this.state.filter.toLowerCase();
-
-    const visibleContacts = this.state.contacts.filter(contact =>
+    return contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizeFilter)
     );
+  };
+  render() {
+    const { filter } = this.state;
 
+    const visibleContacts = this.getVisibleContacts();
     return (
       <div>
         <h1>Phonebook</h1>
